@@ -18,8 +18,10 @@
 </h1>
 
 ## 导入
-#### Maven 导入
+
 <a name="maven"></a>
+
+#### Maven 导入
 没有添加 JitPack 的 Repo 的话首先添加 Repo, 在 pom 里面把这些粘贴进去：
 
 ```xml
@@ -43,8 +45,9 @@
 
 然后 Reimport 就完事了！
 
-#### Gradle 导入
 <a name="gradle"></a>
+
+#### Gradle 导入
 没有添加 JitPack 的 Repo 的话首先添加 Repo, 在 pom 里面把这些粘贴进去:
 
 ```gradle
@@ -69,8 +72,9 @@ dependencies {
 
 #### [其他导入(SBT / Leiningen)](https://jitpack.io/#nitu2003/TConfig)
 
-## 开发
 <a name="dev"></a>
+
+## 开发
 
 #### 创建一个设定档
 ```java
@@ -100,8 +104,9 @@ String[] sa = c.getStringList(name, category, defaultValues, comment);
 c.save();
 ```
 
-## 常见问题
 <a name="faq"></a>
+
+## 常见问题
 
 #### 为什么新设定档没有保存？
 读取完成后执行 `c.save()` 啦！
@@ -110,8 +115,9 @@ c.save();
 没有，你可以利用 `getStringList` 来做自己的。  
 ~~*当然我也欢迎你提交其他类型的数组方法，大改就是转到字符串再转回来这样子！*~~
 
-## 开源条款
 <a name="license"></a>
+
+## 开源条款
 程序源代码部分按照 LGPL 2.1 开源  
 Codes are licensed under LGPL 2.1  
 Readme 借鉴自 [PicqBotX](https://github.com/HyDevelop/PicqBotX)，获得授权使用。  

@@ -32,6 +32,7 @@ import org.apache.commons.io.IOUtils;
 
 import com.google.common.base.CharMatcher;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.primitives.Doubles;
 import com.google.common.primitives.Floats;
 
 public class Configuration {
@@ -1475,6 +1476,39 @@ public class Configuration {
 
 	public File getConfigFile() {
 		return file;
+	}
+	
+	/*****************************************************************************************************************
+	 *
+	 * Taskeren Coding
+	 * WARNING! The following code has NOT been checked!
+	 *
+	 *****************************************************************************************************************/
+	
+	/**
+	 * Creates a double property.
+	 * 
+	 * @param name         Name of the property
+	 * @param category     Category of the property
+	 * @param defaultValue Default value of the property
+	 * @param minValue     Minimum value of the property
+	 * @param maxValue     Maximum value of the property
+	 * @param comment      A brief description what the property does.
+	 * @return The value of the new double property.
+	 */
+	public double getDouble(String name, String category, double defaultValue, double minValue, double maxValue,
+			String comment) {
+		Property prop = this.get(category, name, Double.toString(defaultValue), name);
+		prop.setComment(comment + " [range: " + minValue + " ~ " + maxValue + ", default: " + defaultValue + "]");
+		prop.setMinValue(minValue);
+		prop.setMaxValue(maxValue);
+		try {
+			double parseDouble = Double.parseDouble(prop.getString());
+			return Doubles.constrainToRange(parseDouble, minValue, maxValue);
+		} catch(Exception e) {
+			//TODO Report Error
+		}
+		return defaultValue;
 	}
 
 }
