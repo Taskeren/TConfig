@@ -76,6 +76,8 @@ dependencies {
 
 ## 开发
 
+#### [举个栗子](https://github.com/nitu2003/TConfig/tree/master/example/Example.java)
+
 #### 创建一个设定档
 ```java
 // 传入一个任意文件
