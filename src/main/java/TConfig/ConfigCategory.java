@@ -21,16 +21,12 @@ import com.google.common.collect.ImmutableSet;
 public class ConfigCategory implements Map<String, Property> {
 	private String name;
 	private String comment;
-	private String languagekey;
 	private ArrayList<ConfigCategory> children = new ArrayList<ConfigCategory>();
 	private Map<String, Property> properties = new TreeMap<String, Property>();
 	@SuppressWarnings("unused")
 	private int propNumber = 0;
 	public final ConfigCategory parent;
 	private boolean changed = false;
-	private boolean requiresWorldRestart = false;
-	private boolean showInGui = true;
-	private boolean requiresMcRestart = false;
 	private List<String> propertyOrder = null;
 
 	public ConfigCategory(String name) {
@@ -91,83 +87,12 @@ public class ConfigCategory implements Map<String, Property> {
 			return ImmutableList.copyOf(properties.values());
 	}
 
-
-	public ConfigCategory setLanguageKey(String languagekey) {
-		this.languagekey = languagekey;
-		return this;
-	}
-
-	public String getLanguagekey() {
-		if (this.languagekey != null)
-			return this.languagekey;
-		else
-			return getQualifiedName();
-	}
-
 	public void setComment(String comment) {
 		this.comment = comment;
 	}
 
 	public String getComment() {
 		return this.comment;
-	}
-
-	/**
-	 * Sets the flag for whether or not this category can be edited while a world is
-	 * running. Care should be taken to ensure that only properties that are truly
-	 * dynamic can be changed from the in-game options menu. Only set this flag to
-	 * true if all child properties/categories are unable to be modified while a
-	 * world is running.
-	 */
-	public ConfigCategory setRequiresWorldRestart(boolean requiresWorldRestart) {
-		this.requiresWorldRestart = requiresWorldRestart;
-		return this;
-	}
-
-	/**
-	 * Returns whether or not this category is able to be edited while a world is
-	 * running using the in-game Mod Options screen as well as the Mods list screen,
-	 * or only from the Mods list screen.
-	 */
-	public boolean requiresWorldRestart() {
-		return this.requiresWorldRestart;
-	}
-
-	/**
-	 * Sets whether or not this ConfigCategory should be allowed to show on config
-	 * GUIs. Defaults to true.
-	 */
-	public ConfigCategory setShowInGui(boolean showInGui) {
-		this.showInGui = showInGui;
-		return this;
-	}
-
-	/**
-	 * Gets whether or not this ConfigCategory should be allowed to show on config
-	 * GUIs. Defaults to true unless set to false.
-	 */
-	public boolean showInGui() {
-		return showInGui;
-	}
-
-	/**
-	 * Sets whether or not this ConfigCategory requires Minecraft to be restarted
-	 * when changed. Defaults to false. Only set this flag to true if ALL child
-	 * properties/categories require Minecraft to be restarted when changed. Setting
-	 * this flag will also prevent modification of the child properties/categories
-	 * while a world is running.
-	 */
-	public ConfigCategory setRequiresMcRestart(boolean requiresMcRestart) {
-		this.requiresMcRestart = this.requiresWorldRestart = requiresMcRestart;
-		return this;
-	}
-
-	/**
-	 * Gets whether or not this ConfigCategory requires Minecraft to be restarted
-	 * when changed. Defaults to false unless set to true.
-	 */
-	public boolean requiresMcRestart() {
-		return this.requiresMcRestart;
 	}
 
 	public ConfigCategory setPropertyOrder(List<String> propertyOrder) {

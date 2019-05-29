@@ -1119,41 +1119,6 @@ public class Configuration {
 	}
 
 	/**
-	 * Adds a language key to the specified ConfigCategory object
-	 *
-	 * @param category the config category
-	 * @param langKey  a language key string such as configcategory.general
-	 */
-	public Configuration setCategoryLanguageKey(String category, String langKey) {
-		getCategory(category).setLanguageKey(langKey);
-		return this;
-	}
-
-	/**
-	 * Sets the flag for whether or not this category can be edited while a world is
-	 * running. Care should be taken to ensure that only properties that are truly
-	 * dynamic can be changed from the in-game options menu. Only set this flag to
-	 * true if all child properties/categories are unable to be modified while a
-	 * world is running.
-	 */
-	public Configuration setCategoryRequiresWorldRestart(String category, boolean requiresWorldRestart) {
-		getCategory(category).setRequiresWorldRestart(requiresWorldRestart);
-		return this;
-	}
-
-	/**
-	 * Sets whether or not this ConfigCategory requires Minecraft to be restarted
-	 * when changed. Defaults to false. Only set this flag to true if ALL child
-	 * properties/categories require Minecraft to be restarted when changed. Setting
-	 * this flag will also prevent modification of the child properties/categories
-	 * while a world is running.
-	 */
-	public Configuration setCategoryRequiresMcRestart(String category, boolean requiresMcRestart) {
-		getCategory(category).setRequiresMcRestart(requiresMcRestart);
-		return this;
-	}
-
-	/**
 	 * Sets the order that direct child properties of this config category will be
 	 * written to the config file and will be displayed in config GUIs.
 	 */
@@ -1332,21 +1297,7 @@ public class Configuration {
 	 * @return The value of the new string property.
 	 */
 	public String getString(String name, String category, String defaultValue, String comment) {
-		return getString(name, category, defaultValue, comment, name, null);
-	}
-
-	/**
-	 * Creates a string property.
-	 *
-	 * @param name         Name of the property.
-	 * @param category     Category of the property.
-	 * @param defaultValue Default value of the property.
-	 * @param comment      A brief description what the property does.
-	 * @param langKey      A language key used for localization of GUIs
-	 * @return The value of the new string property.
-	 */
-	public String getString(String name, String category, String defaultValue, String comment, String langKey) {
-		return getString(name, category, defaultValue, comment, langKey, null);
+		return getString(name, category, defaultValue, comment, (Pattern) null);
 	}
 
 	/**
@@ -1359,23 +1310,7 @@ public class Configuration {
 	 * @return The value of the new string property.
 	 */
 	public String getString(String name, String category, String defaultValue, String comment, Pattern pattern) {
-		return getString(name, category, defaultValue, comment, name, pattern);
-	}
-
-	/**
-	 * Creates a string property.
-	 *
-	 * @param name         Name of the property.
-	 * @param category     Category of the property.
-	 * @param defaultValue Default value of the property.
-	 * @param comment      A brief description what the property does.
-	 * @param langKey      A language key used for localization of GUIs
-	 * @return The value of the new string property.
-	 */
-	public String getString(String name, String category, String defaultValue, String comment, String langKey,
-			Pattern pattern) {
 		Property prop = this.get(category, name, defaultValue);
-		prop.setLanguageKey(langKey);
 		prop.setValidationPattern(pattern);
 		prop.setComment(comment + " [default: " + defaultValue + "]");
 		return prop.getString();
@@ -1392,7 +1327,7 @@ public class Configuration {
 	 * @return The value of the new string property.
 	 */
 	public String getString(String name, String category, String defaultValue, String comment, String[] validValues) {
-		return getString(name, category, defaultValue, comment, validValues, name);
+		return getString(name, category, defaultValue, comment, validValues, null);
 	}
 
 	/**
@@ -1410,50 +1345,14 @@ public class Configuration {
 	 */
 	public String getString(String name, String category, String defaultValue, String comment, String[] validValues,
 			String[] validValuesDisplay) {
-		return setPropertyAndGetString(name, category, defaultValue, comment, validValues, validValuesDisplay, name);
-	}
-
-	/**
-	 * Creates a string property.
-	 *
-	 * @param name         Name of the property.
-	 * @param category     Category of the property.
-	 * @param defaultValue Default value of the property.
-	 * @param comment      A brief description what the property does.
-	 * @param validValues  A list of valid values that this property can be set to.
-	 * @param langKey      A language key used for localization of GUIs
-	 * @return The value of the new string property.
-	 */
-	public String getString(String name, String category, String defaultValue, String comment, String[] validValues,
-			String langKey) {
-		return setPropertyAndGetString(name, category, defaultValue, comment, validValues, null, langKey);
-	}
-
-	/**
-	 * Creates a string property.
-	 *
-	 * @param name               Name of the property.
-	 * @param category           Category of the property.
-	 * @param defaultValue       Default value of the property.
-	 * @param comment            A brief description what the property does.
-	 * @param validValues        A list of valid values that this property can be
-	 *                           set to.
-	 * @param validValuesDisplay an array of the config GUI display versions of the
-	 *                           valid values that this Property can be set to.
-	 * @param langKey            A language key used for localization of GUIs
-	 * @return The value of the new string property.
-	 */
-	public String getString(String name, String category, String defaultValue, String comment, String[] validValues,
-			String[] validValuesDisplay, String langKey) {
-		return setPropertyAndGetString(name, category, defaultValue, comment, validValues, validValuesDisplay, langKey);
+		return setPropertyAndGetString(name, category, defaultValue, comment, validValues, validValuesDisplay);
 	}
 
 	private String setPropertyAndGetString(String name, String category, String defaultValue, String comment,
-			String[] validValues, String[] validValuesDisplay, String langKey) {
+			String[] validValues, String[] validValuesDisplay) {
 		Property prop = this.get(category, name, defaultValue);
 		prop.setValidValues(validValues);
 		prop.setValidValuesDisplay(validValuesDisplay);
-		prop.setLanguageKey(langKey);
 		prop.setComment(comment + " [default: " + defaultValue + "]");
 		return prop.getString();
 	}
@@ -1468,21 +1367,7 @@ public class Configuration {
 	 * @return The value of the new string property.
 	 */
 	public String[] getStringList(String name, String category, String[] defaultValues, String comment) {
-		return getStringList(name, category, defaultValues, comment, null, name);
-	}
-
-	/**
-	 * Creates a string list property.
-	 *
-	 * @param name         Name of the property.
-	 * @param category     Category of the property.
-	 * @param defaultValue Default value of the property.
-	 * @param comment      A brief description what the property does.
-	 * @return The value of the new string property.
-	 */
-	public String[] getStringList(String name, String category, String[] defaultValue, String comment,
-			String[] validValues) {
-		return getStringList(name, category, defaultValue, comment, validValues, name);
+		return getStringList(name, category, defaultValues, comment, null);
 	}
 
 	/**
@@ -1500,8 +1385,7 @@ public class Configuration {
 	 */
 	public String[] getStringList(String name, String category, String[] defaultValue, String comment,
 			String[] validValues, String[] validValuesDisplay) {
-		return setPropertyAndGetStringList(name, category, defaultValue, comment, validValues, validValuesDisplay,
-				name);
+		return setPropertyAndGetStringList(name, category, defaultValue, comment, validValues, validValuesDisplay);
 	}
 
 	/**
@@ -1512,40 +1396,18 @@ public class Configuration {
 	 * @param defaultValue Default value of the property.
 	 * @param comment      A brief description what the property does.
 	 * @param validValues  A list of valid values that this property can be set to.
-	 * @param langKey      A language key used for localization of GUIs
 	 * @return The value of the new string property.
 	 */
 	public String[] getStringList(String name, String category, String[] defaultValue, String comment,
-			String[] validValues, String langKey) {
-		return setPropertyAndGetStringList(name, category, defaultValue, comment, validValues, null, langKey);
-	}
-
-	/**
-	 * Creates a string list property.
-	 *
-	 * @param name               Name of the property.
-	 * @param category           Category of the property.
-	 * @param defaultValue       Default value of the property.
-	 * @param comment            A brief description what the property does.
-	 * @param validValues        A list of valid values that this property can be
-	 *                           set to.
-	 * @param validValuesDisplay an array of the config GUI display versions of the
-	 *                           valid values that this Property can be set to.
-	 * @param langKey            A language key used for localization of GUIs
-	 * @return The value of the new string property.
-	 */
-	public String[] getStringList(String name, String category, String[] defaultValue, String comment,
-			String[] validValues, String[] validValuesDisplay, String langKey) {
-		return setPropertyAndGetStringList(name, category, defaultValue, comment, validValues, validValuesDisplay,
-				langKey);
+			String[] validValues) {
+		return setPropertyAndGetStringList(name, category, defaultValue, comment, validValues, null);
 	}
 
 	private String[] setPropertyAndGetStringList(String name, String category, String[] defaultValue, String comment,
-			String[] validValues, String[] validValuesDisplay, String langKey) {
+			String[] validValues, String[] validValuesDisplay) {
 		Property prop = this.get(category, name, defaultValue);
 		prop.setValidValues(validValues);
 		prop.setValidValuesDisplay(validValuesDisplay);
-		prop.setLanguageKey(langKey);
 		prop.setComment(comment + " [default: " + prop.getDefault() + "]");
 		return prop.getStringList();
 	}
@@ -1560,22 +1422,7 @@ public class Configuration {
 	 * @return The value of the new boolean property.
 	 */
 	public boolean getBoolean(String name, String category, boolean defaultValue, String comment) {
-		return getBoolean(name, category, defaultValue, comment, name);
-	}
-
-	/**
-	 * Creates a boolean property.
-	 *
-	 * @param name         Name of the property.
-	 * @param category     Category of the property.
-	 * @param defaultValue Default value of the property.
-	 * @param comment      A brief description what the property does.
-	 * @param langKey      A language key used for localization of GUIs
-	 * @return The value of the new boolean property.
-	 */
-	public boolean getBoolean(String name, String category, boolean defaultValue, String comment, String langKey) {
 		Property prop = this.get(category, name, defaultValue);
-		prop.setLanguageKey(langKey);
 		prop.setComment(comment + " [default: " + defaultValue + "]");
 		return prop.getBoolean(defaultValue);
 	}
@@ -1592,25 +1439,7 @@ public class Configuration {
 	 * @return The value of the new integer property.
 	 */
 	public int getInt(String name, String category, int defaultValue, int minValue, int maxValue, String comment) {
-		return getInt(name, category, defaultValue, minValue, maxValue, comment, name);
-	}
-
-	/**
-	 * Creates a integer property.
-	 *
-	 * @param name         Name of the property.
-	 * @param category     Category of the property.
-	 * @param defaultValue Default value of the property.
-	 * @param minValue     Minimum value of the property.
-	 * @param maxValue     Maximum value of the property.
-	 * @param comment      A brief description what the property does.
-	 * @param langKey      A language key used for localization of GUIs
-	 * @return The value of the new integer property.
-	 */
-	public int getInt(String name, String category, int defaultValue, int minValue, int maxValue, String comment,
-			String langKey) {
 		Property prop = this.get(category, name, defaultValue);
-		prop.setLanguageKey(langKey);
 		prop.setComment(comment + " [range: " + minValue + " ~ " + maxValue + ", default: " + defaultValue + "]");
 		prop.setMinValue(minValue);
 		prop.setMaxValue(maxValue);
@@ -1631,25 +1460,7 @@ public class Configuration {
 	 */
 	public float getFloat(String name, String category, float defaultValue, float minValue, float maxValue,
 			String comment) {
-		return getFloat(name, category, defaultValue, minValue, maxValue, comment, name);
-	}
-
-	/**
-	 * Creates a float property.
-	 *
-	 * @param name         Name of the property.
-	 * @param category     Category of the property.
-	 * @param defaultValue Default value of the property.
-	 * @param minValue     Minimum value of the property.
-	 * @param maxValue     Maximum value of the property.
-	 * @param comment      A brief description what the property does.
-	 * @param langKey      A language key used for localization of GUIs
-	 * @return The value of the new float property.
-	 */
-	public float getFloat(String name, String category, float defaultValue, float minValue, float maxValue,
-			String comment, String langKey) {
 		Property prop = this.get(category, name, Float.toString(defaultValue), name);
-		prop.setLanguageKey(langKey);
 		prop.setComment(comment + " [range: " + minValue + " ~ " + maxValue + ", default: " + defaultValue + "]");
 		prop.setMinValue(minValue);
 		prop.setMaxValue(maxValue);

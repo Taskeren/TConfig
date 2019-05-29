@@ -39,15 +39,9 @@ public class Property {
 	private String[] defaultValues;
 	private String[] validValues;
 	private String[] validValuesDisplay;
-	private String langKey;
 	private String minValue;
 	private String maxValue;
-	/** If true, will have a slider attached automatically in configuration UI */
-	private boolean hasSlidingControl;
 
-	private boolean requiresWorldRestart = false;
-	private boolean showInGui = true;
-	private boolean requiresMcRestart = false;
 	private Pattern validationPattern;
 	private final boolean wasRead;
 	private final boolean isList;
@@ -105,7 +99,6 @@ public class Property {
 		this.maxListLength = -1;
 		this.minValue = String.valueOf(Integer.MIN_VALUE);
 		this.maxValue = String.valueOf(Integer.MAX_VALUE);
-		this.langKey = langKey;
 		this.setComment("");
 	}
 
@@ -148,7 +141,6 @@ public class Property {
 		this.maxListLength = -1;
 		this.minValue = String.valueOf(Integer.MIN_VALUE);
 		this.maxValue = String.valueOf(Integer.MAX_VALUE);
-		this.langKey = langKey;
 		this.setComment("");
 	}
 
@@ -245,64 +237,6 @@ public class Property {
 	}
 
 	/**
-	 * Sets the flag for whether or not this Property can be edited while a world is
-	 * running. Care should be taken to ensure that only properties that are truly
-	 * dynamic can be changed from the in-game options menu. When set to false the
-	 * Property will be editable from both the main menu Mods list config screen and
-	 * the in-game Mod Options config screen. When set to true the Property will
-	 * only be editable from the main menu Mods list config screen.
-	 */
-	public Property setRequiresWorldRestart(boolean requiresWorldRestart) {
-		this.requiresWorldRestart = requiresWorldRestart;
-		return this;
-	}
-
-	/**
-	 * Returns whether or not this Property is able to be edited while a world is
-	 * running using the in-game Mod Options screen as well as the Mods list screen,
-	 * or only from the Mods list screen. Setting this flag to true will disable
-	 * editing of this property while a world is running.
-	 */
-	public boolean requiresWorldRestart() {
-		return this.requiresWorldRestart;
-	}
-
-	/**
-	 * Sets whether or not this Property should be allowed to show on config GUIs.
-	 * Defaults to true.
-	 */
-	public Property setShowInGui(boolean showInGui) {
-		this.showInGui = showInGui;
-		return this;
-	}
-
-	/**
-	 * Gets whether or not this Property should be allowed to show on config GUIs.
-	 * Defaults to true unless set to false.
-	 */
-	public boolean showInGui() {
-		return showInGui;
-	}
-
-	/**
-	 * Sets whether or not this Property requires Minecraft to be restarted when
-	 * changed. Defaults to false. Setting this flag to true will also disable
-	 * editing of this property while a world is running.
-	 */
-	public Property setRequiresMcRestart(boolean requiresMcRestart) {
-		this.requiresMcRestart = this.requiresWorldRestart = requiresMcRestart;
-		return this;
-	}
-
-	/**
-	 * Gets whether or not this Property requires Minecraft to be restarted when
-	 * changed. Defaults to false unless set to true.
-	 */
-	public boolean requiresMcRestart() {
-		return this.requiresMcRestart;
-	}
-
-	/**
 	 * Sets the maximum length of this list/array Property. Only important if
 	 * isList() == true. If the current values array or default values array is
 	 * longer than the new maximum it will be resized. If calling both this method
@@ -367,27 +301,6 @@ public class Property {
 	 */
 	public Pattern getValidationPattern() {
 		return this.validationPattern;
-	}
-
-	/**
-	 * Sets the localization language key for this Property so that the config GUI
-	 * screens are nice and pretty <3. The string languageKey + ".tooltip" is used
-	 * for tooltips when a user hovers the mouse over a GUI property label.
-	 *
-	 * @param langKey a string language key such as myawesomemod.config.myPropName
-	 */
-	public Property setLanguageKey(String langKey) {
-		this.langKey = langKey;
-		return this;
-	}
-
-	/**
-	 * Gets the language key string for this Property.
-	 *
-	 * @return the language key
-	 */
-	public String getLanguageKey() {
-		return this.langKey;
 	}
 
 	/**
@@ -1062,11 +975,4 @@ public class Property {
 		set(Double.toString(value));
 	}
 
-	public boolean hasSlidingControl() {
-		return hasSlidingControl;
-	}
-
-	public void setHasSlidingControl(boolean b) {
-		hasSlidingControl = b;
-	}
 }
