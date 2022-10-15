@@ -4,23 +4,29 @@ plugins {
 	`maven-publish`
 }
 
-version = "1.1"
+version = "1.2"
 
 repositories {
 	mavenCentral()
 }
 
 dependencies {
-	implementation("com.google.guava:guava:27.0.1-jre")
-	implementation("commons-io:commons-io:2.4")
-	testImplementation("junit:junit:4.12")
+	implementation("com.google.guava:guava:31.1-jre")
+	implementation("commons-io:commons-io:2.11.0")
+
+	implementation("org.jetbrains:annotations:23.0.0")
+
+	implementation("org.slf4j:slf4j-api:2.0.3")
+
+	testImplementation("junit:junit:4.13.2")
+	testImplementation("org.slf4j:slf4j-simple:2.0.3")
 }
 
 publishing {
 	publications {
 		create<MavenPublication>("maven") {
 			groupId = "com.github.taskeren"
-			artifactId = "tconfig"
+			artifactId = "config"
 			version = "${project.version}"
 
 			from(components["java"])
